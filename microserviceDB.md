@@ -285,3 +285,5 @@ To port forwarding your app and your database
              - <microservice_name>.monitor.pagonxt.dev.corp
     ...
     ```
+  * src/db/*.ts:
+    > Code needs to be changed to launch the specific microservice CRUD on database
