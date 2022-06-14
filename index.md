@@ -85,8 +85,8 @@ To port forwarding your app and your database
   After that you can connecto to your DB with ```localhost<microserviceName>-db:5433``` and to your app with ```http://localhost:8080/<microserviceName>```
 
 ## Database configuration on Infrastructure project
-  * Proyecto de infrastructure:
-    - Valores de Terraform -> main/dev/terraform.tfvars
+  * Infrastructure project:
+    - Terraform values -> main/dev/terraform.tfvars
       ```
       <microservice_name> = {
           sql_db_enable = true
@@ -99,7 +99,7 @@ To port forwarding your app and your database
           uris          = ["/<microservice_name>"]
         }
       ```
-    - Passwords de BBDD -> main/dev/secrets_passwords.enc.json
+    - DB Passwords -> main/dev/secrets_passwords.enc.json
       ```
         "db_<microservice_name>_user_password": "<generated_encrypted_password>",
         "db_<microservice_name>_read_user_password": "<generated_encrypted_password>",
