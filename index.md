@@ -169,6 +169,9 @@ To port forwarding your app and your database
       ...
       "@pagonxt/em-accs-common-lib": "latest",
       ...
+      "db-migrate": "^0.11.12",
+      "db-migrate-pg": "^1.2.2",
+      ...
       }
     ```
   * infrastructure/**/*-config-map.properties:
