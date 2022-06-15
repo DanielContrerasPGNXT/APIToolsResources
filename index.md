@@ -62,6 +62,8 @@ Note: Remember that you have to select this zone in the upper menu: Europe(Irela
 ## Connect to AWS environment
 
 ### Only first time
+  Install [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
   First ...
   ```
   aws eks --region eu-west-1 update-kubeconfig --name potd1aireksemoneypmts001
