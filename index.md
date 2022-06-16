@@ -232,7 +232,6 @@ To port forwarding your app and your database
     ```
   * src/app/index.ts:
     ```
-      ...
       import { defaultClient } from '@pagonxt/em-accs-common-lib/lib/db';
       ...
       defaultClient.init();
