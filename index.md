@@ -177,7 +177,7 @@ To port forwarding your app and your database
   * infrastructure/**/*-config-map.properties:
     ```
       PGDATABASE=<microservice_name>-db
-      DEPLOYMENT_ENVIRONMENT=<envionmnt (dev | prod)>
+      DEPLOYMENT_ENVIRONMENT=<envionmnt (dev | pre | pro)>
       EXPOSE_API_DOCS=true
       APP_SHORT_NAME=<microservice_short_name>
     ```
