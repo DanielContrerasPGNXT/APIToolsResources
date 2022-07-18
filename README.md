@@ -1,8 +1,8 @@
-### API Tools Documentation Project
+### API Tools Resources Project
 
   ## Team Organization
 
-   # [Jira Workflow](./jiraWorkflow.md)
+   # [Jira Workflow](./JiraWorkflow.md)
 
   ## Microservices
 
