@@ -144,13 +144,8 @@
     ```
   * src/app/index.ts:
     ```
-      import { defaultClient } from '@pagofx/db';
       ...
-      defaultClient;
-      /**
-      * Server Activation
-      */
-      app.listen(PORT, () => {
+      import { defaultClient } from '@pagofx/db';
       ...
     ```
   * db/**:
@@ -202,4 +197,136 @@
     ...
     ```
   * src/db/*.ts:
+    >
     > Code needs to be changed to launch the specific microservice CRUD on database
+    >
+    > - ```src/db/db.ts``` is a wrapper to connect to ```@pagofx/db```library and add logger and custom control, for example:
+      ```
+        import {
+          Client, execute as executeMonorepo,
+          executeAll as executeAllMonorepo, findAll as findAllMonorepo,
+          findOne as findOneMonorepo, transaction as transactionMonorepo
+        } from '@pagofx/db/lib/src';
+        import { Query } from '@pagofx/db/lib/src/types/query';
+        import { QueryResult } from 'pg';
+        import { info } from '../common/logger';
+
+        /**
+        * Special logger to pass the db log info to the parent thread.
+        *
+        * Extracted from monorepo-imports and tweaked to work with parentLogger
+        *
+        * @param _eventType - Type of the event
+        * @param event - The event itself
+        */
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const dbLog = (_eventType: string, event: any = {}): void => {
+          info(
+            'onetrade-webhooks.db',
+            {'event':JSON.stringify(event),'eventType':_eventType},
+            'ACTIVITY'
+          );
+        };
+
+        /**
+        * Performs a Query in the DB and returns an array of results
+        *
+        * @param query - Query to be performed
+        * @returns results
+        */
+        export const findAll = async <T>(query: Query): Promise<T[]> => {
+          return await findAllMonorepo(query, dbLog);
+        };
+
+        /**
+        * Performs a Query in the DB and returns the first result
+        *
+        * @param query - Query to be performed
+        * @returns results
+        */
+        export const findOne = async <T>(query: Query): Promise<T> => {
+          return await findOneMonorepo(query, dbLog);
+        };
+
+        /**
+        * Executes a query
+        *
+        * @param query - Query to be executed
+        * @returns results
+        */
+        export const execute = async (query: Query): Promise<QueryResult> => {
+          return await executeMonorepo(query, dbLog);
+        };
+
+        /**
+        * Creates a transaction and executes all the queries inside it
+        *
+        * @param transactionName - name of the transaction
+        * @param queries - queries to be executed
+        * @returns results
+        */
+        export const executeAll = async (
+          transactionName: string,
+          queries: Query[],
+        ): Promise<QueryResult[]> => {
+          return await executeAllMonorepo(transactionName, queries, dbLog);
+        };
+
+        /**
+        * Create a transaction and execute it
+        *
+        * @param name - Name of the transaction
+        * @param fn - function to execute queries during the transaction
+        * @returns A promise that fulfills when the transaction ends
+        */
+        export const transaction = async <T>(
+          name: string,
+          fn: (client: Client) => Promise<T>,
+        ): Promise<T> => {
+          return await transactionMonorepo(name, fn, dbLog);
+        };
+      ```
+    > - ```src/queries/*.ts``` has the queries for the database, using the ```@pagofx/db```methods, at least one file for type of query (select, delete, insert, update), for example:
+      ```
+        import { sql } from '@pagofx/db/lib/src/sql-tag';
+        import { Query } from '@pagofx/db/lib/src/types/query';
+
+        export const getRecords = (): Query => sql(
+          'get-records',
+        )`
+          SELECT
+            *
+          FROM
+            database.records
+        `;
+      ```
+    > - ```src/<microservice_name>DB.ts``` has the specific methoods to call the queries against the database, that should be called from the router methods, for example:
+    ```
+      import { execute, findAll, findOne } from './db';
+      import { error } from '../common/logger';
+      import { InternalServerError } from '../common/types/response';
+      import { getRecords } from './queries';
+      ...
+        export const getRecordsDB = async (
+        ): Promise<Array<Record>> => {
+          try {
+            const records: Array<Record> = await findAll(getRecords());
+            if(!records.length){
+              error(
+                <Descriptive_string_to_log>,
+                <log_information>,
+                <log_type>
+              );
+            }
+            return records;
+          } catch (err) {
+              error(
+                <Descriptive_string_to_log>,
+                <log_information>,
+                <log_type>
+              );
+              return [];
+          }
+        };
+      ...
+    ```
