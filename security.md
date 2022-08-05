@@ -6,7 +6,7 @@
       @pagofx:registry=https://gitlab.com/api/v4/packages/npm/
       ...
     ```
-  - Import security library on package.json, with the last version published ```npm install @pagoxf/security```
+  - Import security library on package.json, with the last version published ```npm install @pagofx/security```
     ```
       ...
       "@pagofx/security": "1.0.0-pfxb-361.0.2.0",
@@ -57,5 +57,7 @@
       import { authorizationMiddleware } from '@pagofx/security';
       ...
       app.use(authorizationMiddleware());
+      // routes/add
+      app.use(`/${process.env.MICROSERVICE_NAME || ''}`, router);
       ...
     ```

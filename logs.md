@@ -6,7 +6,7 @@
       @pagofx:registry=https://gitlab.com/api/v4/packages/npm/
       ...
     ```
-  - Import security library on package.json, with the last version published ```npm install @pagoxf/security```
+  - Import security library on package.json, with the last version published ```npm install @pagofx/observability```
     ```
       ...
       "@pagofx/observability": "1.0.0-beta.0.0.0",

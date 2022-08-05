@@ -65,6 +65,13 @@
       # - local: gitlab-ci/sonarcloud.yml
       #  - local: gitlab-ci/pre-merge.yml
     ```
+  * Setup the .npmrc with your authToken for gitlab registry
+    ```
+      ...
+      //gitlab.com/api/v4/packages/npm/:_authToken=<gitlab_generated_auth_token>
+      @pagofx:registry=https://gitlab.com/api/v4/packages/npm/
+      ...
+    ```
   * package.json:
     ```
       "scripts": {
